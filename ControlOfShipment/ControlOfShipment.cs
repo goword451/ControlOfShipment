@@ -10,9 +10,9 @@ using System.Windows.Forms;
 
 namespace ControlOfShipment
 {
-    public partial class Form1 : Form
+    public partial class ControlOfShipment : Form
     {
-        public Form1()
+        public ControlOfShipment()
         {
             InitializeComponent();
         }
