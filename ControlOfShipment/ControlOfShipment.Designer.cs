@@ -33,18 +33,14 @@ namespace ControlOfShipment
             this.ClearButton = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
-            this.dataGridView1 = new System.Windows.Forms.DataGridView();
-            this.NameReception = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ReceptionAmount = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.textBox1 = new System.Windows.Forms.TextBox();
-            this.textBox2 = new System.Windows.Forms.TextBox();
-            this.dataGridView2 = new System.Windows.Forms.DataGridView();
-            this.dataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.dataGridViewTextBoxColumn2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.GetTable = new System.Windows.Forms.DataGridView();
+            this.Get = new System.Windows.Forms.TextBox();
+            this.Give = new System.Windows.Forms.TextBox();
+            this.GiveTable = new System.Windows.Forms.DataGridView();
             this.label3 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.GetTable)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.GiveTable)).BeginInit();
             this.SuspendLayout();
             // 
             // ClearButton
@@ -56,6 +52,7 @@ namespace ControlOfShipment
             this.ClearButton.TabIndex = 0;
             this.ClearButton.Text = "Очистить";
             this.ClearButton.UseVisualStyleBackColor = true;
+            this.ClearButton.Click += new System.EventHandler(this.ClearButton_Click);
             // 
             // label1
             // 
@@ -79,69 +76,44 @@ namespace ControlOfShipment
             this.label2.TabIndex = 2;
             this.label2.Text = "Поле ввода данных для приёма";
             // 
-            // dataGridView1
+            // GetTable
             // 
-            this.dataGridView1.Anchor = System.Windows.Forms.AnchorStyles.Top;
-            this.dataGridView1.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.DisplayedCells;
-            this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView1.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.NameReception,
-            this.ReceptionAmount});
-            this.dataGridView1.Location = new System.Drawing.Point(73, 149);
-            this.dataGridView1.Name = "dataGridView1";
-            this.dataGridView1.Size = new System.Drawing.Size(334, 296);
-            this.dataGridView1.TabIndex = 3;
+            this.GetTable.Anchor = System.Windows.Forms.AnchorStyles.Top;
+            this.GetTable.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.DisplayedCells;
+            this.GetTable.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.GetTable.Location = new System.Drawing.Point(73, 149);
+            this.GetTable.Name = "GetTable";
+            this.GetTable.ReadOnly = true;
+            this.GetTable.Size = new System.Drawing.Size(334, 296);
+            this.GetTable.TabIndex = 3;
             // 
-            // NameReception
+            // Get
             // 
-            this.NameReception.HeaderText = "Наименование";
-            this.NameReception.Name = "NameReception";
-            this.NameReception.Width = 146;
+            this.Get.Anchor = System.Windows.Forms.AnchorStyles.Top;
+            this.Get.Location = new System.Drawing.Point(152, 67);
+            this.Get.Name = "Get";
+            this.Get.Size = new System.Drawing.Size(193, 20);
+            this.Get.TabIndex = 4;
+            this.Get.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.Get_CheckEnter);
             // 
-            // ReceptionAmount
+            // Give
             // 
-            this.ReceptionAmount.HeaderText = "Количество";
-            this.ReceptionAmount.Name = "ReceptionAmount";
-            this.ReceptionAmount.Width = 145;
+            this.Give.Anchor = System.Windows.Forms.AnchorStyles.Top;
+            this.Give.Location = new System.Drawing.Point(713, 67);
+            this.Give.Name = "Give";
+            this.Give.Size = new System.Drawing.Size(202, 20);
+            this.Give.TabIndex = 5;
+            this.Give.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.Give_CheckEnter);
             // 
-            // textBox1
+            // GiveTable
             // 
-            this.textBox1.Anchor = System.Windows.Forms.AnchorStyles.Top;
-            this.textBox1.Location = new System.Drawing.Point(152, 67);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(193, 20);
-            this.textBox1.TabIndex = 4;
-            // 
-            // textBox2
-            // 
-            this.textBox2.Anchor = System.Windows.Forms.AnchorStyles.Top;
-            this.textBox2.Location = new System.Drawing.Point(713, 67);
-            this.textBox2.Name = "textBox2";
-            this.textBox2.Size = new System.Drawing.Size(202, 20);
-            this.textBox2.TabIndex = 5;
-            // 
-            // dataGridView2
-            // 
-            this.dataGridView2.Anchor = System.Windows.Forms.AnchorStyles.Top;
-            this.dataGridView2.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView2.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.dataGridViewTextBoxColumn1,
-            this.dataGridViewTextBoxColumn2});
-            this.dataGridView2.Location = new System.Drawing.Point(639, 149);
-            this.dataGridView2.Name = "dataGridView2";
-            this.dataGridView2.Size = new System.Drawing.Size(343, 296);
-            this.dataGridView2.TabIndex = 6;
-            // 
-            // dataGridViewTextBoxColumn1
-            // 
-            this.dataGridViewTextBoxColumn1.HeaderText = "Наименование";
-            this.dataGridViewTextBoxColumn1.Name = "dataGridViewTextBoxColumn1";
-            this.dataGridViewTextBoxColumn1.Width = 200;
-            // 
-            // dataGridViewTextBoxColumn2
-            // 
-            this.dataGridViewTextBoxColumn2.HeaderText = "Количество";
-            this.dataGridViewTextBoxColumn2.Name = "dataGridViewTextBoxColumn2";
+            this.GiveTable.Anchor = System.Windows.Forms.AnchorStyles.Top;
+            this.GiveTable.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.GiveTable.Location = new System.Drawing.Point(639, 149);
+            this.GiveTable.Name = "GiveTable";
+            this.GiveTable.ReadOnly = true;
+            this.GiveTable.Size = new System.Drawing.Size(343, 296);
+            this.GiveTable.TabIndex = 6;
             // 
             // label3
             // 
@@ -165,7 +137,7 @@ namespace ControlOfShipment
             this.label4.TabIndex = 8;
             this.label4.Text = "ОТГРУЗКА";
             // 
-            // Form1
+            // ControlOfShipment
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -173,18 +145,19 @@ namespace ControlOfShipment
             this.ClientSize = new System.Drawing.Size(1051, 568);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.label3);
-            this.Controls.Add(this.dataGridView2);
-            this.Controls.Add(this.textBox2);
-            this.Controls.Add(this.textBox1);
-            this.Controls.Add(this.dataGridView1);
+            this.Controls.Add(this.GiveTable);
+            this.Controls.Add(this.Give);
+            this.Controls.Add(this.Get);
+            this.Controls.Add(this.GetTable);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.ClearButton);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.Name = "Form1";
+            this.Name = "ControlOfShipment";
             this.Text = "Управление приёмкой и отгрузкой";
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).EndInit();
+            this.Load += new System.EventHandler(this.ControlOfShipment_Load);
+            ((System.ComponentModel.ISupportInitialize)(this.GetTable)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.GiveTable)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -195,14 +168,10 @@ namespace ControlOfShipment
         private System.Windows.Forms.Button ClearButton;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.DataGridView dataGridView1;
-        private System.Windows.Forms.TextBox textBox1;
-        private System.Windows.Forms.TextBox textBox2;
-        private System.Windows.Forms.DataGridView dataGridView2;
-        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn1;
-        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn2;
-        private System.Windows.Forms.DataGridViewTextBoxColumn NameReception;
-        private System.Windows.Forms.DataGridViewTextBoxColumn ReceptionAmount;
+        private System.Windows.Forms.DataGridView GetTable;
+        private System.Windows.Forms.TextBox Get;
+        private System.Windows.Forms.TextBox Give;
+        private System.Windows.Forms.DataGridView GiveTable;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label4;
     }
