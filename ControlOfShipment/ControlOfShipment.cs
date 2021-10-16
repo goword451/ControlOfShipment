@@ -49,21 +49,62 @@ namespace ControlOfShipment
             GiveTable.DataSource = tableGive;
         }
 
+        static bool IsHexLetter(char ch)
+        {
+            return (ch >= 'A' && ch <= 'F') || (ch >= 'a' && ch <= 'F');
+        }
+
+
         private void Get_CheckEnter(object sender, KeyPressEventArgs e)
         {
             if (e.KeyChar == 13)
             {
+                bool matched = false;
                 var data = new Data(Get.Text);
-                string script = $"INSERT INTO RECEPTION (Value, Count) VALUES (N'{data.Value.ToUpper()}', N'{data.Count}')";
-                SqlCommand command = new SqlCommand(script, sqlConnection);
-                command.ExecuteNonQuery();
-                sqlDataAdapterGet = new SqlDataAdapter("SELECT * FROM RECEPTION", sqlConnection);
 
-                tableGet = new DataTable();
+                for (int i = 0; i < data.Value.Length; i++)
+                {
+                    if (IsHexLetter(data.Value[i]))
+                    {
+                        matched = true;
+                    }
 
-                sqlDataAdapterGet.Fill(tableGet);
+                    else
+                    {
+                        matched = false;
+                        continue;
+                    }
+                    
+                    if (char.IsDigit(data.Value[i]))
+                    {
+                        matched = true;
+                    }
 
-                GetTable.DataSource = tableGet;
+                    else
+                    {
+                        matched = false;
+                        continue;
+                    }
+                }
+
+                if(matched && data.Value.Length == 24)
+                {
+                    string script = $"INSERT INTO RECEPTION (Value, Count) VALUES (N'{data.Value.ToUpper()}', N'{data.Count}')";
+                    SqlCommand command = new SqlCommand(script, sqlConnection);
+                    command.ExecuteNonQuery();
+                    sqlDataAdapterGet = new SqlDataAdapter("SELECT * FROM RECEPTION", sqlConnection);
+
+                    tableGet = new DataTable();
+
+                    sqlDataAdapterGet.Fill(tableGet);
+
+                    GetTable.DataSource = tableGet;
+                }
+
+                else
+                {
+                    MessageBox.Show("Неверный идендификатор");
+                }
             }
         }
 
