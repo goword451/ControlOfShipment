@@ -78,7 +78,6 @@ namespace ControlOfShipment
             // 
             // GetTable
             // 
-            this.GetTable.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.GetTable.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.DisplayedCells;
             this.GetTable.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.GetTable.Location = new System.Drawing.Point(73, 149);

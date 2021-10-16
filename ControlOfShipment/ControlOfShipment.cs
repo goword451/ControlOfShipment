@@ -1,13 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Data;
 using System.Data.SqlClient;
 
 namespace ControlOfShipment
@@ -64,18 +57,7 @@ namespace ControlOfShipment
 
                 for (int i = 0; i < data.Value.Length; i++)
                 {
-                    if (IsHexLetter(data.Value[i]))
-                    {
-                        matched = true;
-                    }
-
-                    else
-                    {
-                        matched = false;
-                        continue;
-                    }
-                    
-                    if (char.IsDigit(data.Value[i]))
+                    if (IsHexLetter(data.Value[i]) || char.IsDigit(data.Value[i]))
                     {
                         matched = true;
                     }
@@ -87,7 +69,7 @@ namespace ControlOfShipment
                     }
                 }
 
-                if(matched && data.Value.Length == 24)
+                if (matched && data.Value.Length == 24)
                 {
                     string script = $"INSERT INTO RECEPTION (Value, Count) VALUES (N'{data.Value.ToUpper()}', N'{data.Count}')";
                     SqlCommand command = new SqlCommand(script, sqlConnection);
@@ -103,8 +85,10 @@ namespace ControlOfShipment
 
                 else
                 {
-                    MessageBox.Show("Неверный идендификатор");
+                    MessageBox.Show("Неверный идендификатор", "Ошибка ввода", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
+
+                Get.Clear();
             }
         }
 
@@ -112,22 +96,53 @@ namespace ControlOfShipment
         {
             if (e.KeyChar == 13)
             {
+                bool matched = false;
                 var data = new Data(Give.Text);
-                string script = $"INSERT INTO GIVE (Value, Count) VALUES (N'{data.Value.ToUpper()}', N'{data.Count}')";
-                SqlCommand command = new SqlCommand(script, sqlConnection);
-                command.ExecuteNonQuery();
-                sqlDataAdapterGive = new SqlDataAdapter("SELECT * FROM GIVE", sqlConnection);
 
-                tableGive = new DataTable();
+                for (int i = 0; i < data.Value.Length; i++)
+                {
+                    if (IsHexLetter(data.Value[i]) || char.IsDigit(data.Value[i]))
+                    {
+                        matched = true;
+                    }
 
-                sqlDataAdapterGive.Fill(tableGive);
+                    else
+                    {
+                        matched = false;
+                        continue;
+                    }
+                }
 
-                GiveTable.DataSource = tableGive;
+                if (matched && data.Value.Length == 24)
+                {
+                    string script = $"INSERT INTO GIVE (Value, Count) VALUES (N'{data.Value.ToUpper()}', N'{data.Count}')";
+                    SqlCommand command = new SqlCommand(script, sqlConnection);
+                    command.ExecuteNonQuery();
+                    sqlDataAdapterGive = new SqlDataAdapter("SELECT * FROM GIVE", sqlConnection);
+
+                    tableGive = new DataTable();
+
+                    sqlDataAdapterGive.Fill(tableGive);
+
+                    GiveTable.DataSource = tableGive;
+
+                    GiveTable.Columns[0].Width = 200;
+                }
+
+                else
+                {
+                    MessageBox.Show("Неверный идендификатор", "Ошибка ввода", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+
+                Give.Clear();
             }
         }
 
         private void ControlOfShipment_Load(object sender, EventArgs e)
         {
+            GetTable.RowHeadersVisible = false;
+            GiveTable.RowHeadersVisible = false;
+
             sqlConnection = new SqlConnection(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\gowor\source\repos\ControlOfShipment\ControlOfShipment\Shipment.mdf;Integrated Security=True");
 
             sqlConnection.Open();
