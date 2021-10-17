@@ -9,7 +9,7 @@
 //------------------------------------------------------------------------------
 
 
-namespace ControlOfShipment.Properties
+namespace ControlofShipmentModel.Properties
 {
     /// <summary>
     ///   Класс ресурсов со строгим типом для поиска локализованных строк и пр.

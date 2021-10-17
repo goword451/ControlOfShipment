@@ -1,17 +1,15 @@
 ﻿using System;
-using System.Data;
 using System.Windows.Forms;
-using System.Data.SqlClient;
+using System.Collections.Generic;
+using System.ComponentModel;
+using ControlofShipmentModel;
 
 namespace ControlOfShipment
 {
     public partial class ControlOfShipment : Form
     {
-        private SqlConnection sqlConnection = null;
-        private SqlDataAdapter sqlDataAdapterGet = null;
-        private SqlDataAdapter sqlDataAdapterGive = null;
-        private DataTable tableGet = null;
-        private DataTable tableGive = null;
+        private List<Data> dataGetList = new List<Data>();
+        private List<Data> dataGiveList = new List<Data>();
 
         public ControlOfShipment()
         {
@@ -20,29 +18,11 @@ namespace ControlOfShipment
 
         private void ClearButton_Click(object sender, EventArgs e)
         {
-            string scriptGive = "DELETE FROM RECEPTION";
-            SqlCommand commandGive = new SqlCommand(scriptGive, sqlConnection);
-
-            string scriptGet = "DELETE FROM GIVE";
-            SqlCommand commandGet = new SqlCommand(scriptGet, sqlConnection);
-
-            commandGive.ExecuteNonQuery();
-            commandGet.ExecuteNonQuery();
-
-            sqlDataAdapterGet = new SqlDataAdapter("SELECT * FROM RECEPTION", sqlConnection);
-            sqlDataAdapterGive = new SqlDataAdapter("SELECT * FROM GIVE", sqlConnection);
-
-            tableGet = new DataTable();
-            tableGive = new DataTable();
-
-            sqlDataAdapterGet.Fill(tableGet);
-            sqlDataAdapterGive.Fill(tableGive);
-
-            GetTable.DataSource = tableGet;
-            GiveTable.DataSource = tableGive;
+            GetTable.Rows.Clear();
+            GiveTable.Rows.Clear();
         }
 
-        static bool IsHexLetter(char ch)
+        private static bool IsHexLetter(char ch)
         {
             return (ch >= 'A' && ch <= 'F') || (ch >= 'a' && ch <= 'F');
         }
@@ -53,7 +33,7 @@ namespace ControlOfShipment
             if (e.KeyChar == 13)
             {
                 bool matched = false;
-                var data = new Data(Get.Text);
+                var data = new Data(Get.Text.ToUpper());
 
                 for (int i = 0; i < data.Value.Length; i++)
                 {
@@ -71,16 +51,26 @@ namespace ControlOfShipment
 
                 if (matched && data.Value.Length == 24)
                 {
-                    string script = $"INSERT INTO RECEPTION (Value, Count) VALUES (N'{data.Value.ToUpper()}', N'{data.Count}')";
-                    SqlCommand command = new SqlCommand(script, sqlConnection);
-                    command.ExecuteNonQuery();
-                    sqlDataAdapterGet = new SqlDataAdapter("SELECT * FROM RECEPTION", sqlConnection);
+                    if (dataGetList.Exists(x => x.Value == data.Value))
+                    {
+                        foreach (var d in dataGetList)
+                        {
+                            if (d.Value == data.Value)
+                            {
+                                d.Count++;
+                                break;
+                            }
+                        }
+                    }
 
-                    tableGet = new DataTable();
+                    else
+                    {
+                        dataGetList.Add(data);
+                    }
 
-                    sqlDataAdapterGet.Fill(tableGet);
-
-                    GetTable.DataSource = tableGet;
+                    var bindingGetList = new BindingList<Data>(dataGetList);
+                    var sourceGet = new BindingSource(bindingGetList, null);
+                    GetTable.DataSource = sourceGet;
                 }
 
                 else
@@ -97,12 +87,13 @@ namespace ControlOfShipment
             if (e.KeyChar == 13)
             {
                 bool matched = false;
-                var data = new Data(Give.Text);
+                var data = new Data(Give.Text.ToUpper());
 
                 for (int i = 0; i < data.Value.Length; i++)
                 {
                     if (IsHexLetter(data.Value[i]) || char.IsDigit(data.Value[i]))
                     {
+                        char.ToUpper(data.Value[i]);
                         matched = true;
                     }
 
@@ -115,18 +106,26 @@ namespace ControlOfShipment
 
                 if (matched && data.Value.Length == 24)
                 {
-                    string script = $"INSERT INTO GIVE (Value, Count) VALUES (N'{data.Value.ToUpper()}', N'{data.Count}')";
-                    SqlCommand command = new SqlCommand(script, sqlConnection);
-                    command.ExecuteNonQuery();
-                    sqlDataAdapterGive = new SqlDataAdapter("SELECT * FROM GIVE", sqlConnection);
+                    if(dataGiveList.Exists(x => x.Value == data.Value))
+                    {
+                        foreach (var d in dataGiveList)
+                        {
+                            if (d.Value == data.Value)
+                            {
+                                d.Count++;
+                                break;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        dataGiveList.Add(data);
+                    }
 
-                    tableGive = new DataTable();
 
-                    sqlDataAdapterGive.Fill(tableGive);
-
-                    GiveTable.DataSource = tableGive;
-
-                    GiveTable.Columns[0].Width = 200;
+                    var bindingGiveList = new BindingList<Data>(dataGiveList);
+                    var sourceGive = new BindingSource(bindingGiveList, null);
+                    GiveTable.DataSource = sourceGive;
                 }
 
                 else
@@ -136,28 +135,6 @@ namespace ControlOfShipment
 
                 Give.Clear();
             }
-        }
-
-        private void ControlOfShipment_Load(object sender, EventArgs e)
-        {
-            GetTable.RowHeadersVisible = false;
-            GiveTable.RowHeadersVisible = false;
-
-            sqlConnection = new SqlConnection(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\gowor\source\repos\ControlOfShipment\ControlOfShipment\Shipment.mdf;Integrated Security=True");
-
-            sqlConnection.Open();
-
-            sqlDataAdapterGet = new SqlDataAdapter("SELECT * FROM RECEPTION", sqlConnection);
-            sqlDataAdapterGive = new SqlDataAdapter("SELECT * FROM GIVE", sqlConnection);
-
-            tableGet = new DataTable();
-            tableGive = new DataTable();
-
-            sqlDataAdapterGet.Fill(tableGet);
-            sqlDataAdapterGive.Fill(tableGive);
-
-            GetTable.DataSource = tableGet;
-            GiveTable.DataSource = tableGive;
         }
     }
 }
